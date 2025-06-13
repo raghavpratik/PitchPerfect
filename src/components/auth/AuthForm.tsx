@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, Mail, Lock, User, Briefcase } from 'lucide-react';
+import { Loader2, Mail, Lock, User } from 'lucide-react';
 import Image from 'next/image';
 
 interface AuthFormProps {
@@ -43,6 +43,8 @@ export function AuthForm({ mode }: AuthFormProps) {
   const initialRole = searchParams.get('role') as 'founder' | 'investor' | null;
   
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
+  const [isLoadingLinkedIn, setIsLoadingLinkedIn] = useState(false); // Placeholder state
   const [selectedRole, setSelectedRole] = useState<'founder' | 'investor' | undefined>(initialRole || user?.role || undefined);
 
   const formSchema = mode === 'signup' ? signUpSchema : signInSchema;
@@ -57,7 +59,6 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     if (mode === 'signup') {
@@ -67,29 +68,37 @@ export function AuthForm({ mode }: AuthFormProps) {
       router.push(signupValues.role === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
     } else {
       const signinValues = values as SignInFormValues;
-      // In a real app, you'd fetch the user's role here
-      // For mock, we'll use the last selected role or default to founder
-      const userRole = user?.role || 'founder';
-      login({ id: Date.now().toString(), email: signinValues.email, role: userRole });
+      const userRoleToLogin = user?.role || 'founder'; // Use existing role if available, else default
+      login({ id: Date.now().toString(), email: signinValues.email, role: userRoleToLogin });
       toast({ title: "Signed In!", description: "Welcome back to PitchPerfect." });
-      router.push(userRole === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
+      router.push(userRoleToLogin === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
     }
     setIsLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
+    setIsLoadingGoogle(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    const roleToLogin = selectedRole || 'founder'; // Default to founder if no role selected for Google sign in
+    const roleToLogin = selectedRole || (mode === 'signup' ? 'founder' : (user?.role || 'founder')); 
     login({ id: 'google-user', email: 'user@google.com', role: roleToLogin, name: 'Google User' });
     toast({ title: "Signed In with Google!", description: "Welcome to PitchPerfect." });
     router.push(roleToLogin === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
-    setIsLoading(false);
+    setIsLoadingGoogle(false);
+  };
+
+  const handleLinkedInSignIn = async () => { // Placeholder
+    setIsLoadingLinkedIn(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    toast({ title: "LinkedIn Sign-In (Coming Soon!)", description: "This feature is under development.", variant: "default" });
+    // const roleToLogin = selectedRole || (mode === 'signup' ? 'founder' : (user?.role || 'founder')); 
+    // login({ id: 'linkedin-user', email: 'user@linkedin.com', role: roleToLogin, name: 'LinkedIn User' });
+    // router.push(roleToLogin === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
+    setIsLoadingLinkedIn(false);
   };
   
   React.useEffect(() => {
     if (mode === 'signup' && initialRole) {
-      form.setValue('role' as any, initialRole); // 'role' exists only in SignUpFormValues
+      form.setValue('role' as any, initialRole); 
       setSelectedRole(initialRole);
       setContextUserRole(initialRole);
     }
@@ -108,6 +117,33 @@ export function AuthForm({ mode }: AuthFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Social Logins First */}
+          <div className="space-y-4 mb-6">
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
+              {isLoadingGoogle ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
+                <Image src="https://placehold.co/20x20.png?text=G" alt="Google" width={20} height={20} className="mr-2" data-ai-hint="google logo" />
+              }
+              {mode === 'signup' ? 'Sign Up with Google' : 'Sign In with Google'}
+            </Button>
+            <Button variant="outline" className="w-full" onClick={handleLinkedInSignIn} disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
+              {isLoadingLinkedIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
+                <Image src="https://placehold.co/20x20.png?text=Li" alt="LinkedIn" width={20} height={20} className="mr-2" data-ai-hint="linkedin logo"/>
+              }
+              {mode === 'signup' ? 'Sign Up with LinkedIn (Soon)' : 'Sign In with LinkedIn (Soon)'}
+            </Button>
+          </div>
+
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or {mode === 'signup' ? 'sign up' : 'sign in'} with email
+              </span>
+            </div>
+          </div>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {mode === 'signup' && (
@@ -196,28 +232,12 @@ export function AuthForm({ mode }: AuthFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" className="w-full" disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
+                {(isLoading && !isLoadingGoogle && !isLoadingLinkedIn) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {mode === 'signin' ? 'Sign In' : 'Create Account'}
               </Button>
             </form>
           </Form>
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-              <Image src="https://placehold.co/20x20.png?text=G" alt="Google" width={20} height={20} className="mr-2" data-ai-hint="google logo" />
-            }
-            Google
-          </Button>
         </CardContent>
         <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">

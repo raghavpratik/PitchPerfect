@@ -128,7 +128,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
     if (creatorQueries.some(query => lowerCaseText.includes(query))) {
       botResponseText = "PitchPerfect is Design & Developed by raghavpratik.";
     } else if (teamQueries.some(query => lowerCaseText.includes(query))) {
-      botResponseText = "Here’s the founding team of PitchPerfect:\n\n👑 Raghav Pratik – Founder & CEO\n🎯 Muskan Sharma – Co-Founder & Chief Product Officer\n💡 Naman Bhojwani – Co-Founder & Chief Technology Officer";
+      botResponseText = "Here’s the founding team of PitchPerfect:\n\n👑 raghavpratik – Founder & CEO\n🎯 Muskan Sharma – Co-Founder & Chief Product Officer\n💡 Naman Bhojwani – Co-Founder & Chief Technology Officer";
     }
      else if (lowerCaseText.includes("hello") || lowerCaseText.includes("hi")) {
       botResponseText = `Hello there! How can I assist you with PitchPerfect today?`;

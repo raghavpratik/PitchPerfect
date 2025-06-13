@@ -1,11 +1,19 @@
 
+"use client"; // Make this a client component to use hooks
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Rocket, Users, TrendingUp, Lightbulb, MessageSquare, ShieldCheck, BarChartBig, Newspaper, LayoutGrid, BrainCircuit, Search } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext"; // Import useAuth
 
 export default function HomePage() {
+  const { isLoggedIn, user } = useAuth(); // Get auth state
+
+  const ignitePitchHref = (isLoggedIn && user?.role === 'founder') ? '/founder-dashboard' : '/signup?role=founder';
+  const discoverStartupsHref = (isLoggedIn && user?.role === 'investor') ? '/investor-dashboard' : '/signup?role=investor';
+
   return (
     <div className="flex flex-col items-center space-y-16 md:space-y-24">
       {/* Top Branding */}
@@ -27,10 +35,10 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="/signup?role=founder">Ignite Your Pitch</Link>
+              <Link href={ignitePitchHref}>Ignite Your Pitch</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/signup?role=investor">Discover Startups</Link>
+              <Link href={discoverStartupsHref}>Discover Startups</Link>
             </Button>
           </div>
         </div>

@@ -39,7 +39,7 @@ export default function HomePage() {
       {/* Top Branding */}
       <section className="w-full pt-8 text-center animate-fade-in-up">
         <h1 className="text-2xl md:text-3xl font-bold font-headline">
-          <span className="text-accent-foreground">PitchPerfect Ltd.</span>
+          <span className="text-primary">PitchPerfect Ltd.</span>
         </h1>
       </section>
 
@@ -101,7 +101,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="flex justify-center pt-4">
-                    <Image src="https://placehold.co/600x400.png" alt="Founder using PitchPerfect" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="founder planning startup"/>
+                    <Image src="https://placehold.co/600x400.png" alt="Founder using PitchPerfect" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="founder success"/>
                 </div>
               </CardContent>
             </Card>
@@ -137,7 +137,7 @@ export default function HomePage() {
                   </div>
                 </div>
                  <div className="flex justify-center pt-4">
-                    <Image src="https://placehold.co/600x400.png" alt="Investor reviewing startups" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="investor dashboard analytics"/>
+                    <Image src="https://placehold.co/600x400.png" alt="Investor reviewing startups" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="investor discovery"/>
                 </div>
               </CardContent>
             </Card>
@@ -189,7 +189,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <Card className="text-center animate-fade-in-up shadow-lg hover:shadow-xl transition-shadow duration-300" style={{animationDelay: "0ms"}}>
               <CardHeader>
-                <CardTitle className="text-2xl font-headline">👑 Raghav Pratik</CardTitle>
+                <CardTitle className="text-2xl font-headline">👑 raghavpratik</CardTitle>
                 <CardDescription className="text-md text-muted-foreground">Founder & CEO</CardDescription>
               </CardHeader>
             </Card>
@@ -228,3 +228,4 @@ export default function HomePage() {
     </div>
   );
 }
+

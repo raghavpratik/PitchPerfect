@@ -34,7 +34,7 @@ export default function FounderDashboardPage() {
     if (!isLoggedIn) {
       router.push('/signin');
     } else if (user?.role !== 'founder') {
-      router.push('/investor-dashboard'); // Or a generic access-denied page
+      router.push('/investor-dashboard'); 
     }
   }, [isLoggedIn, user, router]);
 
@@ -67,7 +67,7 @@ export default function FounderDashboardPage() {
     setGeneratedImageUrl(null);
     try {
       const result = await generateImageFromPrompt({ prompt: promptToUse });
-      setGeneratedImageUrl(result.imageUrl); // This is a data URI
+      setGeneratedImageUrl(result.imageUrl); 
       if (result.revisedPrompt) {
         setEnhancedPrompt(result.revisedPrompt);
          toast({ title: "Image Generated!", description: "AI also revised the prompt slightly for this image." });
@@ -103,8 +103,8 @@ export default function FounderDashboardPage() {
               value={ideaPrompt}
               onChange={(e) => {
                 setIdeaPrompt(e.target.value);
-                if (enhancedPrompt) setEnhancedPrompt(''); // Clear enhanced if original changes
-                if (generatedImageUrl) setGeneratedImageUrl(null); // Clear image if original changes
+                if (enhancedPrompt) setEnhancedPrompt(''); 
+                if (generatedImageUrl) setGeneratedImageUrl(null); 
               }}
               rows={5}
               className="text-base p-4 focus:ring-2 focus:ring-primary/50"
@@ -156,7 +156,7 @@ export default function FounderDashboardPage() {
                 </CardHeader>
                 <CardContent className="flex justify-center">
                   <Image
-                    src={generatedImageUrl} // data URI from Genkit
+                    src={generatedImageUrl} 
                     alt="AI Generated Image for startup idea"
                     width={512}
                     height={512}

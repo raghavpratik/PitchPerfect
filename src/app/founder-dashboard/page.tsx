@@ -10,8 +10,8 @@ import { Loader2, UploadCloud, BrainCircuit, Sparkles, FileImage, Wand2 } from '
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import { enhancePrompt } from '@/ai/flows/pitchpad-enhance-prompt';
-import { generateImageFromPrompt } from '@/ai/flows/pitchpad-generate-image';
+import { enhancePrompt } from '@/ai/flows/pitchpad-enhance-prompt.ts';
+import { generateImageFromPrompt } from '@/ai/flows/pitchpad-generate-image.ts';
 
 const mockIdeas = [
   { id: '1', title: 'AI-Powered Recipe Generator for Dietary Restrictions', description: 'An app that creates custom recipes based on user-inputted dietary needs, allergies, and available ingredients.' },

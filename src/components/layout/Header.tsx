@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Rocket, LogIn, UserPlus, LogOut, LayoutDashboard, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog, Bell, UserCircle as UserIconLucide } from "lucide-react"; // Added Bell, UserIconLucide
+import { Rocket, LogIn, UserPlus, LogOut, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog, Bell, UserCircle as UserIconLucide } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { ThemeToggleButton } from "@/components/theme-toggle-button";
@@ -16,12 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 
 export function Header() {
   const { isLoggedIn, user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
@@ -29,12 +31,12 @@ export function Header() {
   };
   
   const getDashboardPath = () => {
+    if (!isLoggedIn) return "/signin"; // Should not be active in nav if not logged in
     if (user?.role === "founder") return "/founder-dashboard";
     if (user?.role === "investor") return "/investor-dashboard";
     return "/signin"; 
   }
 
-  // Clicking PitchPerfect logo always goes to homepage
   const getBrandLink = () => {
     return "/";
   }
@@ -45,6 +47,14 @@ export function Header() {
     return <UserIconLucide className="mr-2 h-4 w-4 text-muted-foreground" />;
   };
 
+  const dashboardPath = getDashboardPath();
+  const newsPath = "/news";
+  const messagesPath = "/messages";
+
+  const isDashboardActive = isLoggedIn && pathname === dashboardPath;
+  const isNewsActive = pathname === newsPath;
+  const isMessagesActive = pathname === messagesPath;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -53,16 +63,40 @@ export function Header() {
           <span className="text-2xl font-bold font-headline text-primary">PitchPerfect</span>
         </Link>
         
-        <nav className="hidden items-center gap-4 md:flex">
+        <nav className="hidden items-center gap-6 md:flex"> {/* Increased gap for better spacing with border */}
           {isLoggedIn && (
-             <Link href={getDashboardPath()} className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+             <Link 
+              href={dashboardPath} 
+              className={cn(
+                "text-sm font-medium transition-colors py-1",
+                isDashboardActive
+                  ? "text-primary font-semibold border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-primary"
+              )}
+            >
                 Dashboard
             </Link>
           )}
-          <Link href="/news" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+          <Link 
+            href={newsPath} 
+            className={cn(
+              "text-sm font-medium transition-colors py-1",
+              isNewsActive
+                ? "text-primary font-semibold border-b-2 border-primary"
+                : "text-muted-foreground hover:text-primary"
+            )}
+          >
             News
           </Link>
-           <Link href="/messages" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+           <Link 
+            href={messagesPath} 
+            className={cn(
+              "text-sm font-medium transition-colors py-1",
+              isMessagesActive
+                ? "text-primary font-semibold border-b-2 border-primary"
+                : "text-muted-foreground hover:text-primary"
+            )}
+          >
             Messages
           </Link>
         </nav>

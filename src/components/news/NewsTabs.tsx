@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -5,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NewsCard } from "./NewsCard";
 import type { NewsItem } from "@/types";
 import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"; // Added import
 
 // Mock data for news items
 const mockNewsData: NewsItem[] = [

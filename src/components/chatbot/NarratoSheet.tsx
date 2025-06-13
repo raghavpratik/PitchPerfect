@@ -110,17 +110,27 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
     let botResponseText = '';
     const lowerCaseText = currentText.toLowerCase();
 
-    if (
-      lowerCaseText.includes("who developed you") ||
-      lowerCaseText.includes("who made you") ||
-      lowerCaseText.includes("developed by") ||
-      lowerCaseText.includes("made by") ||
-      lowerCaseText.includes("designed by") ||
-      lowerCaseText.includes("who designed you") ||
-      lowerCaseText.includes("who created you")
-    ) {
+    const creatorQueries = [
+      "who created you", "who made you", "who developed you", "who designed you",
+      "who built this app", "who coded this", "who's behind this project",
+      "who’s the maker", "developer of this site", "designer of pitchperfect",
+      "founder of pitchperfect", "made by whom", "who is the creator of this",
+      "created by whom", "who’s your creator", "credits?", "show developer info",
+      "who’s running this", "who launched this site", "who owns this project"
+    ];
+
+    const teamQueries = [
+      "who are the people behind pitchperfect", "what’s the team like",
+      "who are the co-founders", "show me the core team",
+      "team members of this project", "who contributed to this project"
+    ];
+
+    if (creatorQueries.some(query => lowerCaseText.includes(query))) {
       botResponseText = "PitchPerfect is Design & Developed by raghavpratik.";
-    } else if (lowerCaseText.includes("hello") || lowerCaseText.includes("hi")) {
+    } else if (teamQueries.some(query => lowerCaseText.includes(query))) {
+      botResponseText = "Here’s the founding team of PitchPerfect:\n\n👑 Raghav Pratik – Founder & CEO\n🎯 Muskan Sharma – Co-Founder & Chief Product Officer\n💡 Naman Bhojwani – Co-Founder & Chief Technology Officer";
+    }
+     else if (lowerCaseText.includes("hello") || lowerCaseText.includes("hi")) {
       botResponseText = `Hello there! How can I assist you with PitchPerfect today?`;
     } else {
       // In a real app, this would call a Genkit flow for chat
@@ -160,7 +170,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
             {messages.map((msg) => (
               <div key={msg.id} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
                 {msg.sender === 'bot' && <BrainCircuit className="h-6 w-6 text-primary flex-shrink-0 self-start" />}
-                <div className={`max-w-[85%] rounded-lg p-3 text-sm shadow-md ${
+                <div className={`max-w-[85%] rounded-lg p-3 text-sm shadow-md whitespace-pre-wrap ${
                     msg.sender === 'user' 
                       ? 'bg-primary text-primary-foreground ml-auto' 
                       : 'bg-muted text-muted-foreground'

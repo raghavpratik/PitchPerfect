@@ -1,18 +1,38 @@
 
-"use client"; // Make this a client component to use hooks
+"use client"; 
 
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Rocket, Users, TrendingUp, Lightbulb, MessageSquare, ShieldCheck, BarChartBig, Newspaper, LayoutGrid, BrainCircuit, Search } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext"; // Import useAuth
+import { Rocket, Users, TrendingUp, Lightbulb, ShieldCheck, BarChartBig, Newspaper, LayoutGrid, BrainCircuit, Search } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function HomePage() {
-  const { isLoggedIn, user } = useAuth(); // Get auth state
+  const { isLoggedIn, user, setUserRole } = useAuth(); 
+  const router = useRouter();
 
-  const ignitePitchHref = (isLoggedIn && user?.role === 'founder') ? '/founder-dashboard' : '/signup?role=founder';
-  const discoverStartupsHref = (isLoggedIn && user?.role === 'investor') ? '/investor-dashboard' : '/signup?role=investor';
+  const handleIgnitePitchClick = () => {
+    if (isLoggedIn && user) {
+      if (user.role !== 'founder') {
+        setUserRole('founder');
+      }
+      router.push('/founder-dashboard');
+    } else {
+      router.push('/signup?role=founder');
+    }
+  };
+
+  const handleDiscoverStartupsClick = () => {
+    if (isLoggedIn && user) {
+      if (user.role !== 'investor') {
+        setUserRole('investor');
+      }
+      router.push('/investor-dashboard');
+    } else {
+      router.push('/signup?role=investor');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center space-y-16 md:space-y-24">
@@ -34,11 +54,11 @@ export default function HomePage() {
             The ultimate launchpad where visionary founders ignite their ideas with AI, and insightful investors discover the next wave of innovation. Let's build the future, together. ✨
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button size="lg" asChild>
-              <Link href={ignitePitchHref}>Ignite Your Pitch</Link>
+            <Button size="lg" onClick={handleIgnitePitchClick}>
+              Ignite Your Pitch
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href={discoverStartupsHref}>Discover Startups</Link>
+            <Button size="lg" variant="outline" onClick={handleDiscoverStartupsClick}>
+              Discover Startups
             </Button>
           </div>
         </div>
@@ -152,8 +172,8 @@ export default function HomePage() {
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
                 Catch the latest buzz from the startup world, financial markets, and tech innovations. Knowledge is power.
             </p>
-            <Button size="lg" variant="outline" asChild>
-                <Link href="/news">Explore Latest News</Link>
+            <Button size="lg" variant="outline" onClick={() => router.push('/news')}>
+                Explore Latest News
             </Button>
         </div>
       </section>
@@ -166,8 +186,8 @@ export default function HomePage() {
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
             Join PitchPerfect today. Your next breakthrough, whether founding or funding, is just a click away.
           </p>
-          <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/signup">Join PitchPerfect Now</Link>
+          <Button size="lg" onClick={() => router.push('/signup')} className="bg-accent text-accent-foreground hover:bg-accent/90">
+            Join PitchPerfect Now
           </Button>
         </div>
       </section>

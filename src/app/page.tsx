@@ -4,9 +4,9 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Rocket, Users, TrendingUp, Lightbulb, ShieldCheck, BarChartBig, Newspaper, LayoutGrid, BrainCircuit, Search } from "lucide-react";
+import { Rocket, Users, TrendingUp, Lightbulb, ShieldCheck, BarChartBig, Newspaper, LayoutGrid, BrainCircuit, Search, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation"; 
 
 export default function HomePage() {
   const { isLoggedIn, user, setUserRole } = useAuth(); 
@@ -175,6 +175,40 @@ export default function HomePage() {
             <Button size="lg" variant="outline" onClick={() => router.push('/news')}>
                 Explore Latest News
             </Button>
+        </div>
+      </section>
+
+      {/* Meet the Team Section */}
+      <section id="team" className="w-full py-16 md:py-24 bg-card/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 text-center">
+          <Users className="h-16 w-16 text-primary mx-auto mb-6" />
+          <h2 className="text-3xl md:text-4xl font-bold font-headline mb-6">Meet the Team</h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
+            The passionate individuals dedicated to making PitchPerfect the leading platform for founders and investors.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <Card className="text-center animate-fade-in-up shadow-lg hover:shadow-xl transition-shadow duration-300" style={{animationDelay: "0ms"}}>
+              <CardHeader>
+                <CardTitle className="text-2xl font-headline">👑 Raghav Pratik</CardTitle>
+                <CardDescription className="text-md text-muted-foreground">Founder & CEO</CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center animate-fade-in-up shadow-lg hover:shadow-xl transition-shadow duration-300" style={{animationDelay: "100ms"}}>
+              <CardHeader>
+                <CardTitle className="text-2xl font-headline">🎯 Muskan Sharma</CardTitle>
+                <CardDescription className="text-md text-muted-foreground">Co-Founder & Chief Product Officer</CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-center animate-fade-in-up shadow-lg hover:shadow-xl transition-shadow duration-300" style={{animationDelay: "200ms"}}>
+              <CardHeader>
+                <CardTitle className="text-2xl font-headline">💡 Naman Bhojwani</CardTitle>
+                <CardDescription className="text-md text-muted-foreground">Co-Founder & Chief Technology Officer</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+          <Button size="lg" variant="outline" onClick={() => router.push('/messages')}>
+            <Mail className="mr-2 h-5 w-5" /> Contact Us
+          </Button>
         </div>
       </section>
 

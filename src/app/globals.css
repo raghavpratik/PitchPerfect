@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -40,7 +41,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     
-    --sidebar-background: 0 0% 98%; /* Keeping sidebar distinct for now, can merge if not used */
+    --sidebar-background: 0 0% 98%; 
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
@@ -48,6 +49,11 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Animated Gradient Colors - Light Mode */
+    --gradient-start: 240 60% 95%; /* Light Lavender */
+    --gradient-mid: 60 80% 95%; /* Light Pale Yellow */
+    --gradient-end: 200 60% 95%; /* Light Sky Blue-ish */
   }
 
   .dark {
@@ -93,6 +99,11 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Animated Gradient Colors - Dark Mode */
+    --gradient-start: 240 20% 10%; /* Deep Blue */
+    --gradient-mid: 270 30% 15%; /* Dark Purple */
+    --gradient-end: 300 25% 12%; /* Dark Magenta/Indigo */
   }
 }
 
@@ -101,14 +112,20 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     @apply font-body;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
+  .bg-animated-gradient {
+    background: linear-gradient(45deg, hsl(var(--gradient-start)), hsl(var(--gradient-mid)), hsl(var(--gradient-end)));
+    background-size: 300% 300%;
+    animation: animatedBackground 20s ease infinite;
+  }
   main {
     flex-grow: 1;
+    background-color: hsl(var(--background)); /* Ensure main content area has solid background over gradient */
   }
   /* Basic fade-in animation */
   .fade-in-up {
@@ -124,5 +141,10 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+   @keyframes animatedBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }

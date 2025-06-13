@@ -9,8 +9,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { ChatbotButton } from "@/components/chatbot/ChatbotButton";
 
 export const metadata: Metadata = {
-  title: "PitchPerfect - Showcase & Discover Startups",
-  description: "A platform for founders to pitch their ideas and investors to find the next big thing.",
+  title: "PitchPerfect - Ignite Your Vision, Attract Investment",
+  description: "The premier launchpad for visionary founders and discerning investors. Connect, innovate, and shape the future.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased flex flex-col min-h-screen">
+      <body className="font-body antialiased flex flex-col min-h-screen bg-animated-gradient">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

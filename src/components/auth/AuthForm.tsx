@@ -44,7 +44,6 @@ export function AuthForm({ mode }: AuthFormProps) {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
-  const [isLoadingLinkedIn, setIsLoadingLinkedIn] = useState(false); // Placeholder state
   const [selectedRole, setSelectedRole] = useState<'founder' | 'investor' | undefined>(initialRole || user?.role || undefined);
 
   const formSchema = mode === 'signup' ? signUpSchema : signInSchema;
@@ -86,16 +85,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     setIsLoadingGoogle(false);
   };
 
-  const handleLinkedInSignIn = async () => { // Placeholder
-    setIsLoadingLinkedIn(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast({ title: "LinkedIn Sign-In (Coming Soon!)", description: "This feature is under development.", variant: "default" });
-    // const roleToLogin = selectedRole || (mode === 'signup' ? 'founder' : (user?.role || 'founder')); 
-    // login({ id: 'linkedin-user', email: 'user@linkedin.com', role: roleToLogin, name: 'LinkedIn User' });
-    // router.push(roleToLogin === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
-    setIsLoadingLinkedIn(false);
-  };
-  
   React.useEffect(() => {
     if (mode === 'signup' && initialRole) {
       form.setValue('role' as any, initialRole); 
@@ -119,17 +108,11 @@ export function AuthForm({ mode }: AuthFormProps) {
         <CardContent>
           {/* Social Logins First */}
           <div className="space-y-4 mb-6">
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isLoadingGoogle}>
               {isLoadingGoogle ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
                 <Image src="https://placehold.co/20x20.png?text=G" alt="Google" width={20} height={20} className="mr-2" data-ai-hint="google logo" />
               }
               {mode === 'signup' ? 'Sign Up with Google' : 'Sign In with Google'}
-            </Button>
-            <Button variant="outline" className="w-full" onClick={handleLinkedInSignIn} disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
-              {isLoadingLinkedIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-                <Image src="https://placehold.co/20x20.png?text=Li" alt="LinkedIn" width={20} height={20} className="mr-2" data-ai-hint="linkedin logo"/>
-              }
-              {mode === 'signup' ? 'Sign Up with LinkedIn (Soon)' : 'Sign In with LinkedIn (Soon)'}
             </Button>
           </div>
 
@@ -232,8 +215,8 @@ export function AuthForm({ mode }: AuthFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading || isLoadingGoogle || isLoadingLinkedIn}>
-                {(isLoading && !isLoadingGoogle && !isLoadingLinkedIn) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" className="w-full" disabled={isLoading || isLoadingGoogle}>
+                {(isLoading && !isLoadingGoogle) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {mode === 'signin' ? 'Sign In' : 'Create Account'}
               </Button>
             </form>

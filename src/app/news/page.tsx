@@ -1,3 +1,5 @@
+"use client";
+
 import { NewsTabs } from "@/components/news/NewsTabs";
 
 export default function NewsPage() {

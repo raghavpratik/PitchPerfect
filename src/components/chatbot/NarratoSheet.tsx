@@ -16,8 +16,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { getPersonalizedSuggestions } from '@/ai/flows/pitchpad-chatbot-suggestions';
 import type { PersonalizedSuggestionsInput, PersonalizedSuggestionsOutput } from '@/ai/flows/pitchpad-chatbot-suggestions';
-import { getChatbotResponse } from '@/ai/flows/pitchpad-chatbot-flow'; // New import
-import type { ChatbotInput, ChatbotOutput } from '@/ai/flows/pitchpad-chatbot-flow'; // New import
+import { getChatbotResponse } from '@/ai/flows/pitchpad-chatbot-flow';
+import type { ChatbotInput, ChatbotOutput } from '@/ai/flows/pitchpad-chatbot-flow';
 import { BrainCircuit, Send, User as UserIcon, MessageSquare, Loader2 } from 'lucide-react';
 import { Skeleton } from '../ui/skeleton';
 
@@ -28,12 +28,12 @@ interface Message {
   isLoading?: boolean;
 }
 
-interface GeminiSheetProps { // Renamed from NarratoSheetProps
+interface NarratoSheetProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }
 
-export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Component name kept for now due to potential references, but UI is "Gemini"
+export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
   const { user } = useAuth();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true);
@@ -42,15 +42,15 @@ export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Co
   const [isBotTyping, setIsBotTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const chatbotTitle = "Gemini - Your AI Assistant";
+  const chatbotTitle = "Narrato - Your AI Assistant";
   
   const getInitialBotMessage = () => {
     if (user?.role === 'founder') {
-      return "Hello Founder! I'm Gemini. How can I assist with your pitch today? Here are some ideas:";
+      return "Hello Founder! I'm Narrato. How can I assist with your pitch today? Here are some ideas:";
     } else if (user?.role === 'investor') {
-      return "Greetings Investor! Gemini here. Looking for the next big thing? Here's how I can help:";
+      return "Greetings Investor! Narrato here. Looking for the next big thing? Here's how I can help:";
     }
-    return "Hi there! I'm Gemini. How can I help you navigate PitchPerfect?";
+    return "Hi there! I'm Narrato. How can I help you navigate PitchPerfect or answer your questions?";
   };
 
 
@@ -85,7 +85,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Co
       setIsLoadingSuggestions(true);
       setIsBotTyping(false);
     }
-  }, [isOpen, user?.role]); // getInitialBotMessage will re-evaluate if user.role changes while open
+  }, [isOpen, user?.role]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -170,7 +170,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Co
             <BrainCircuit className="mr-2 h-7 w-7 text-primary" /> {chatbotTitle}
           </SheetTitle>
           <SheetDescription className="text-xs">
-            Your AI-powered guide on PitchPerfect. Powered by Gemini.
+            Your AI-powered guide on PitchPerfect. Ask me anything!
           </SheetDescription>
         </SheetHeader>
         
@@ -194,7 +194,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Co
               <div className="flex items-end gap-2">
                 <BrainCircuit className="h-6 w-6 text-primary flex-shrink-0 self-start" />
                 <div className="max-w-[85%] rounded-lg p-3 text-sm shadow-md bg-muted text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin inline-block mr-2" /> Gemini is thinking...
+                  <Loader2 className="h-4 w-4 animate-spin inline-block mr-2" /> Narrato is thinking...
                 </div>
               </div>
             )}
@@ -228,7 +228,7 @@ export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Co
         <SheetFooter className="p-4 pt-2 border-t bg-background">
           <div className="flex w-full items-center space-x-2">
             <Input 
-              placeholder="Ask Gemini..." 
+              placeholder="Ask Narrato..." 
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); }}}

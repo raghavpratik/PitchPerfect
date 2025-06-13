@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Rocket, LogIn, UserPlus, LogOut, LayoutDashboard, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog, Bell } from "lucide-react"; // Added Bell
+import { Rocket, LogIn, UserPlus, LogOut, LayoutDashboard, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog, Bell, UserCircle as UserIconLucide } from "lucide-react"; // Added Bell, UserIconLucide
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { ThemeToggleButton } from "@/components/theme-toggle-button";
@@ -34,19 +34,15 @@ export function Header() {
     return "/signin"; 
   }
 
+  // Clicking PitchPerfect logo always goes to homepage
   const getBrandLink = () => {
-    if (isLoggedIn && user) {
-      return getDashboardPath();
-    }
     return "/";
   }
 
-  // Using text emoji for simplicity and cross-platform consistency here
-  // For more complex custom icons, SVG components would be better.
   const RoleDisplay = ({ role }: { role: "founder" | "investor" | null }) => {
-    if (role === "founder") return <span className="mr-2" role="img" aria-label="Founder">🚀</span>;
-    if (role === "investor") return <span className="mr-2" role="img" aria-label="Investor">💼</span>;
-    return null;
+    if (role === "founder") return <UserCog className="mr-2 h-4 w-4 text-primary" aria-label="Founder" />;
+    if (role === "investor") return <Briefcase className="mr-2 h-4 w-4 text-primary" aria-label="Investor" />;
+    return <UserIconLucide className="mr-2 h-4 w-4 text-muted-foreground" />;
   };
 
   return (
@@ -73,7 +69,7 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => router.push('/notifications')} aria-label="Notifications">
-            <Heart className="h-[1.2rem] w-[1.2rem] text-red-500" /> {/* Made heart red for notifications */}
+            <Heart className="h-[1.2rem] w-[1.2rem] text-red-500" />
           </Button>
           <ThemeToggleButton />
           {isLoggedIn && user ? (
@@ -102,7 +98,6 @@ export function Header() {
                   <UserCog className="mr-2 h-4 w-4" />
                   Profile Settings
                 </DropdownMenuItem>
-                {/* Messages link removed from here, present in main nav */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
@@ -129,4 +124,3 @@ export function Header() {
     </header>
   );
 }
-

@@ -20,11 +20,11 @@ export function NewsCard({ item, animationDelay = "0ms" }: NewsCardProps) {
     >
       <div className="relative w-full h-48">
         <Image
-          src={item.imageUrl || "https://placehold.co/600x400.png?text=News"}
+          src={item.imageUrl || "https://placehold.co/600x400.png"}
           alt={item.title}
           layout="fill"
           objectFit="cover"
-          data-ai-hint={item.dataAiHint || "news article"}
+          data-ai-hint={item.dataAiHint || "news article image"}
         />
       </div>
       <CardHeader className="pb-3">
@@ -46,4 +46,3 @@ export function NewsCard({ item, animationDelay = "0ms" }: NewsCardProps) {
     </Card>
   );
 }
-

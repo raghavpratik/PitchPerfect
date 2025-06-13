@@ -11,7 +11,7 @@ export default function Loading() {
         <div className="relative">
           <Loader2 className="h-20 w-20 animate-spin text-primary" />
           <Image 
-            src="https://placehold.co/40x40.png?text=🚀" 
+            src="https://placehold.co/40x40.png" 
             alt="PitchPerfect Loading" 
             width={32} 
             height={32} 
@@ -27,4 +27,3 @@ export default function Loading() {
     </div>
   );
 }
-

@@ -10,7 +10,7 @@ import { ChatbotButton } from "@/components/chatbot/ChatbotButton";
 
 export const metadata: Metadata = {
   title: "PitchPerfect - Ignite Your Vision, Attract Investment",
-  description: "The premier launchpad for visionary founders and discerning investors. Connect, innovate, and shape the future.",
+  description: "The premier launchpad for visionary founders and discerning investors. Connect, innovate, and shape the future. Your journey to impact starts here.",
 };
 
 export default function RootLayout({

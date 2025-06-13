@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -213,7 +214,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           </div>
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-              <Image src="/google-logo.svg" alt="Google" width={20} height={20} className="mr-2" data-ai-hint="google logo" />
+              <Image src="https://placehold.co/20x20.png?text=G" alt="Google" width={20} height={20} className="mr-2" data-ai-hint="google logo" />
             }
             Google
           </Button>

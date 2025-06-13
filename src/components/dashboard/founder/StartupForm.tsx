@@ -35,7 +35,7 @@ const industries = [
   "Tech", "Healthcare", "Finance", "Education", "E-commerce", "Sustainability", 
   "AI", "Robotics", "Biotech", "Clean Energy", "Web3", "Gaming", "SaaS", 
   "Creator Economy", "Food & Beverage", "Travel & Hospitality", "Real Estate", 
-  "Fashion", "Logistics", "Entertainment", "Others"
+  "Fashion", "Logistics", "Entertainment", "Quantum Computing", "Space Tech", "Cybersecurity", "Others"
 ];
 const stages: StartupStage[] = ["Idea", "Pre-Seed", "Seed", "MVP", "Growth", "Series A", "Series B+", "Acquired", "Others"];
 
@@ -72,9 +72,9 @@ export function StartupForm({ initialData, onSubmitSuccess }: StartupFormProps) 
 
     const processedData: Startup = {
       id: initialData?.id || Date.now().toString(),
-      founderId: initialData?.founderId || 'current-user-id',
+      founderId: initialData?.founderId || 'current-user-id', // This should be replaced with actual user ID
       ...values,
-      logoUrl: logoPreview || 'https://placehold.co/100x100.png?text=Logo',
+      logoUrl: logoPreview || 'https://placehold.co/100x100.png', // Default placeholder
     };
     
     toast({ title: "Startup Profile Saved!", description: `${values.name} details have been updated.` });
@@ -113,6 +113,17 @@ export function StartupForm({ initialData, onSubmitSuccess }: StartupFormProps) 
                   />
                 </div>
                 <FormDescription className="text-center mt-2">Click to upload (Max 2MB)</FormDescription>
+                 <FormField
+                    control={form.control}
+                    name="logoUrl"
+                    render={({ field }) => (
+                        <FormItem className="sr-only">
+                        <FormLabel>Logo URL</FormLabel>
+                        <FormControl><Input {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
               </div>
               <div className="md:col-span-2 space-y-6">
                 <FormField
@@ -178,7 +189,7 @@ export function StartupForm({ initialData, onSubmitSuccess }: StartupFormProps) 
             <div className="flex justify-end">
               <Button type="submit" disabled={isLoading} size="lg">
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {initialData ? "Save Changes" : "Create Profile"}
+                {initialData?.id && initialData.name ? "Save Changes" : "Create Profile"}
               </Button>
             </div>
           </form>

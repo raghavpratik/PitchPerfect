@@ -4,12 +4,9 @@
 import React, { useState, useEffect } from 'react';
 import { StartupForm } from '@/components/dashboard/founder/StartupForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Startup } from '@/types';
-import { UserCog, Edit3, Building } from 'lucide-react'; // Added Building icon
+import { UserCog, Building } from 'lucide-react'; 
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,13 +18,11 @@ export default function ProfileSettingsPage() {
   const router = useRouter();
 
   const [startup, setStartup] = useState<Startup | null>(null);
-  const [isLoadingStartup, setIsLoadingStartup] = useState(true); // For founder's startup data
+  const [isLoadingStartup, setIsLoadingStartup] = useState(true); 
 
-  // Effect for loading founder's startup data
   useEffect(() => {
     if (isLoggedIn && user?.role === 'founder' && user.id) {
       setIsLoadingStartup(true);
-      // Simulate a slight delay for loading, good for UX if actual fetch takes time
       setTimeout(() => {
         const storedStartup = localStorage.getItem(MOCK_STARTUP_ID_PREFIX + user.id);
         if (storedStartup) {
@@ -38,14 +33,17 @@ export default function ProfileSettingsPage() {
             setStartup(null);
           }
         } else {
-          setStartup(null); // No startup profile yet
+          setStartup(null); 
         }
         setIsLoadingStartup(false);
       }, 300);
-    } else {
-      setIsLoadingStartup(false); // Not a founder or not logged in, no startup data to load
+    } else if (!isLoggedIn && typeof window !== 'undefined') {
+      router.push('/signin');
     }
-  }, [isLoggedIn, user]);
+    else {
+      setIsLoadingStartup(false); 
+    }
+  }, [isLoggedIn, user, router]);
 
   const handleStartupFormSubmit = (data: Startup) => {
     if (user && user.id && user.role === 'founder') {
@@ -56,11 +54,10 @@ export default function ProfileSettingsPage() {
     }
   };
 
-  if (!isLoggedIn && typeof window !== 'undefined') { // Check for window to avoid SSR issues with router
-     router.push('/signin');
+  if (!isLoggedIn && typeof window !== 'undefined') { 
      return <div className="flex justify-center items-center h-screen"><p>Redirecting to sign in...</p></div>;
   }
-  if (!user) {
+  if (!user && isLoggedIn) { // only show loading if logged in but user data is not yet available
     return <div className="flex justify-center items-center h-screen"><p>Loading user data...</p></div>;
   }
 
@@ -71,36 +68,15 @@ export default function ProfileSettingsPage() {
         <UserCog className="h-16 w-16 text-primary mx-auto mb-4" />
         <h1 className="text-4xl font-bold font-headline mb-4">Profile Settings</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Manage your account details, preferences, and startup profile if you're a founder.
+          {user?.role === 'founder' 
+            ? "Manage your startup profile and preferences."
+            : "Manage your account preferences."
+          }
         </p>
       </div>
       
-      <Card className="w-full max-w-2xl mx-auto animate-fade-in-up" style={{animationDelay: "100ms"}}>
-        <CardHeader>
-          <CardTitle className="flex items-center"><Edit3 className="mr-2 h-5 w-5 text-primary"/> Account Information</CardTitle>
-          <CardDescription>Your personal information and role on PitchPerfect.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <Label htmlFor="name">Full Name</Label>
-            <Input id="name" defaultValue={user?.name || ""} placeholder="Your Name" className="mt-1"/>
-          </div>
-          <div>
-            <Label htmlFor="email">Email Address</Label>
-            <Input id="email" type="email" defaultValue={user?.email || ""} placeholder="your@email.com" disabled  className="mt-1"/>
-          </div>
-          <div>
-            <Label htmlFor="role">Current Role</Label>
-            <Input id="role" defaultValue={user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Not set"} disabled className="mt-1" />
-          </div>
-          <Button className="w-full" onClick={() => toast({ title: "Coming Soon!", description: "Ability to update basic profile info is under development."})}>
-            Update Account Info (Placeholder)
-          </Button>
-        </CardContent>
-      </Card>
-
       {user?.role === 'founder' && (
-        <Card className="w-full max-w-4xl mx-auto animate-fade-in-up mt-8" style={{animationDelay: "200ms"}}>
+        <Card className="w-full max-w-4xl mx-auto animate-fade-in-up mt-8" style={{animationDelay: "100ms"}}>
           <CardHeader>
             <CardTitle className="font-headline text-2xl md:text-3xl flex items-center">
               <Building className="mr-3 h-7 w-7 text-primary"/> 
@@ -122,6 +98,18 @@ export default function ProfileSettingsPage() {
               <StartupForm initialData={startup || undefined} onSubmitSuccess={handleStartupFormSubmit} />
             )}
           </CardContent>
+        </Card>
+      )}
+
+      {user?.role !== 'founder' && !isLoadingStartup && (
+         <Card className="w-full max-w-2xl mx-auto animate-fade-in-up" style={{animationDelay: "100ms"}}>
+            <CardHeader>
+                <CardTitle>Preferences</CardTitle>
+                <CardDescription>Manage your notification settings and other preferences here (coming soon).</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground">More settings will be available soon.</p>
+            </CardContent>
         </Card>
       )}
     </div>

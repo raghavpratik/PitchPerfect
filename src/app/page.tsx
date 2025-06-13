@@ -11,8 +11,6 @@ export default function HomePage() {
       {/* Top Branding */}
       <section className="w-full pt-8 text-center animate-fade-in-up">
         <h1 className="text-2xl md:text-3xl font-bold font-headline">
-          <span className="text-primary">raghavpratik</span>
-          <span className="text-foreground"> Founder and CEO - </span>
           <span className="text-accent-foreground">PitchPerfect Ltd.</span>
         </h1>
       </section>
@@ -164,13 +162,6 @@ export default function HomePage() {
             <Link href="/signup">Join PitchPerfect Now</Link>
           </Button>
         </div>
-      </section>
-
-      {/* Footer Credit */}
-      <section className="w-full pt-10 pb-16 text-center">
-        <p className="text-2xl md:text-3xl font-semibold text-muted-foreground">
-          design and developed by raghavpratik
-        </p>
       </section>
     </div>
   );

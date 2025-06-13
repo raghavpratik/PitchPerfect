@@ -55,6 +55,13 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
 
   useEffect(() => {
     if (isOpen) {
+      // Set initial bot message as soon as the sheet opens
+      setMessages([{
+        id: Date.now().toString(),
+        text: initialBotMessage,
+        sender: 'bot'
+      }]);
+
       const fetchSuggestions = async () => {
         setIsLoadingSuggestions(true);
         try {
@@ -63,30 +70,20 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
           };
           const result: PersonalizedSuggestionsOutput = await getPersonalizedSuggestions(input);
           setSuggestions(result.suggestions);
-          
-          setMessages([{
-            id: Date.now().toString(),
-            text: initialBotMessage,
-            sender: 'bot'
-          }]);
-
         } catch (error) {
           console.error("Failed to fetch suggestions:", error);
-          setSuggestions(["Sorry, I couldn't load suggestions right now."]);
-           setMessages([{
-            id: Date.now().toString(),
-            text: "Sorry, I couldn't load suggestions right now.",
-            sender: 'bot'
-          }]);
+          setSuggestions([]); // Set to empty array, no error message in chat
         } finally {
           setIsLoadingSuggestions(false);
         }
       };
       fetchSuggestions();
     } else {
+      // Reset state when sheet closes
       setMessages([]);
       setSuggestions([]);
       setInputText('');
+      setIsLoadingSuggestions(true); // Reset loading state for next open
     }
   }, [isOpen, user?.role, initialBotMessage]);
 
@@ -110,11 +107,25 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
       sender: 'user' 
     };
     
-    // Placeholder bot response
-    // In a real app, this would call a Genkit flow for chat
-    const botResponseText = currentText.toLowerCase().includes("hello") || currentText.toLowerCase().includes("hi") 
-      ? `Hello there! How can I assist you with PitchPerfect today?`
-      : `I've received your message: "${currentText}". My full conversational abilities are still under development, but I'm learning fast!`;
+    let botResponseText = '';
+    const lowerCaseText = currentText.toLowerCase();
+
+    if (
+      lowerCaseText.includes("who developed you") ||
+      lowerCaseText.includes("who made you") ||
+      lowerCaseText.includes("developed by") ||
+      lowerCaseText.includes("made by") ||
+      lowerCaseText.includes("designed by") ||
+      lowerCaseText.includes("who designed you") ||
+      lowerCaseText.includes("who created you")
+    ) {
+      botResponseText = "PitchPerfect is Design & Developed by raghavpratik.";
+    } else if (lowerCaseText.includes("hello") || lowerCaseText.includes("hi")) {
+      botResponseText = `Hello there! How can I assist you with PitchPerfect today?`;
+    } else {
+      // In a real app, this would call a Genkit flow for chat
+      botResponseText = `I've received your message: "${currentText}". My full conversational abilities are still under development, but I'm learning fast!`;
+    }
 
     const botResponse: Message = { 
       id: (Date.now() + 1).toString(), 
@@ -160,14 +171,14 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
                 {msg.sender === 'user' && <UserIcon className="h-6 w-6 text-muted-foreground flex-shrink-0 self-start" />}
               </div>
             ))}
-            {isLoadingSuggestions && (
+            {isLoadingSuggestions && messages.length <= 1 && ( // Only show skeleton if it's initial load and only bot greeting is present
               <div className="space-y-2 pt-2">
                 <Skeleton className="h-10 w-full rounded-md" />
                 <Skeleton className="h-10 w-5/6 rounded-md" />
                 <Skeleton className="h-10 w-3/4 rounded-md" />
               </div>
             )}
-            {!isLoadingSuggestions && suggestions.length > 0 && messages.length === 1 && (
+            {!isLoadingSuggestions && suggestions.length > 0 && messages.length <=1 && ( // Only show initial suggestions if no other interaction
                <div className="pt-4 space-y-2">
                  <p className="text-xs text-muted-foreground mb-2">Or try one of these:</p>
                  {suggestions.map((suggestion, index) => (
@@ -205,4 +216,3 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
     </Sheet>
   );
 }
-

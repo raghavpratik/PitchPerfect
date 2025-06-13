@@ -54,11 +54,20 @@ const chatbotFlow = ai.defineFlow(
     outputSchema: ChatbotOutputSchema,
   },
   async (input: ChatbotInput) => {
-    const {output} = await prompt(input);
-    if (!output) {
-      return { response: "I'm currently unable to process that request. Please try again later." };
+    try {
+      const {output} = await prompt(input);
+      if (!output) {
+        // This case handles if the prompt succeeds but returns an empty/null output
+        console.warn('Chatbot prompt returned no output for input:', input);
+        return { response: "I'm having a bit of trouble formulating a response right now. Could you try rephrasing or asking again in a moment?" };
+      }
+      return output;
+    } catch (error) {
+      // This catch block will handle network errors, API errors (like 503), etc.
+      console.error('Error in chatbotFlow during AI prompt call:', error);
+      // Provide a user-friendly message indicating a temporary service issue.
+      return { response: "I'm currently unable to process that request due to a temporary issue with the AI service. Please try again later." };
     }
-    return output;
   }
 );
 

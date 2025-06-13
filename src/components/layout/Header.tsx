@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Rocket, LogIn, UserPlus, LogOut, LayoutDashboard, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog } from "lucide-react";
+import { Rocket, LogIn, UserPlus, LogOut, LayoutDashboard, Newspaper, DollarSign, MessageCircle, Heart, Briefcase, UserCog, Bell } from "lucide-react"; // Added Bell
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { ThemeToggleButton } from "@/components/theme-toggle-button";
@@ -41,9 +41,11 @@ export function Header() {
     return "/";
   }
 
-  const RoleIcon = ({ role }: { role: "founder" | "investor" | null }) => {
-    if (role === "founder") return <UserCog className="mr-2 h-4 w-4 text-primary" />;
-    if (role === "investor") return <Briefcase className="mr-2 h-4 w-4 text-primary" />;
+  // Using text emoji for simplicity and cross-platform consistency here
+  // For more complex custom icons, SVG components would be better.
+  const RoleDisplay = ({ role }: { role: "founder" | "investor" | null }) => {
+    if (role === "founder") return <span className="mr-2" role="img" aria-label="Founder">🚀</span>;
+    if (role === "investor") return <span className="mr-2" role="img" aria-label="Investor">💼</span>;
     return null;
   };
 
@@ -71,7 +73,7 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => router.push('/notifications')} aria-label="Notifications">
-            <Heart className="h-[1.2rem] w-[1.2rem]" />
+            <Heart className="h-[1.2rem] w-[1.2rem] text-red-500" /> {/* Made heart red for notifications */}
           </Button>
           <ThemeToggleButton />
           {isLoggedIn && user ? (
@@ -88,22 +90,19 @@ export function Header() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none flex items-center">
-                      <RoleIcon role={user.role} /> {user.name || user.email}
+                      <RoleDisplay role={user.role} /> {user.name || user.email}
                     </p>
-                    <p className="text-xs leading-none text-muted-foreground pl-6">
-                       {user.email} ({user.role})
+                    <p className="text-xs leading-none text-muted-foreground">
+                       {user.email} ({user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : ''})
                     </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                 <DropdownMenuItem onClick={() => router.push('/profile-settings')}> {/* Assuming a general profile settings page */}
-                  <UserPlus className="mr-2 h-4 w-4" /> {/* Changed icon for generic profile */}
+                 <DropdownMenuItem onClick={() => router.push('/profile-settings')}>
+                  <UserCog className="mr-2 h-4 w-4" />
                   Profile Settings
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/messages')}>
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Messages
-                </DropdownMenuItem>
+                {/* Messages link removed from here, present in main nav */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
@@ -130,3 +129,4 @@ export function Header() {
     </header>
   );
 }
+

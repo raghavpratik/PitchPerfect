@@ -11,7 +11,7 @@ export default function Loading() {
         <div className="relative">
           <Loader2 className="h-20 w-20 animate-spin text-primary" />
           <Image 
-            src="https://placehold.co/40x40.png?text=🚀" // Placeholder for a small logo or icon
+            src="https://placehold.co/40x40.png?text=🚀" 
             alt="PitchPerfect Loading" 
             width={32} 
             height={32} 
@@ -19,11 +19,12 @@ export default function Loading() {
             data-ai-hint="rocket icon"
           />
         </div>
-        <h2 className="text-2xl font-headline font-semibold text-foreground">Igniting Brilliance...</h2>
+        <h2 className="text-3xl font-headline font-semibold text-foreground">Igniting...</h2>
         <p className="text-md text-muted-foreground max-w-xs text-center">
-          Just a moment while PitchPerfect prepares your launchpad to success!
+          Hold tight! PitchPerfect is fueling your journey to success.
         </p>
       </div>
     </div>
   );
 }
+

@@ -1,8 +1,9 @@
+
 export interface User {
   id: string;
   email: string;
   name?: string;
-  role: "founder" | "investor" | null; // Allow null for initial state before role selection
+  role: "founder" | "investor" | null; 
   avatarUrl?: string;
 }
 
@@ -30,6 +31,7 @@ export interface NewsItem {
   date: string;
   category: "Startup News" | "Stock Market Updates" | "Funding Rounds" | "Tech & AI";
   link: string;
+  dataAiHint?: string; // Added for better placeholder image generation hints
 }
 
 export interface PricingTier {
@@ -39,3 +41,4 @@ export interface PricingTier {
   features: string[];
   highlight?: boolean;
 }
+

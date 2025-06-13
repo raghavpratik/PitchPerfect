@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -13,14 +14,17 @@ interface NewsCardProps {
 
 export function NewsCard({ item, animationDelay = "0ms" }: NewsCardProps) {
   return (
-    <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden animate-fade-in-up" style={{ animationDelay }}>
+    <Card 
+      className="flex flex-col h-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden animate-fade-in-up transform hover:scale-105" 
+      style={{ animationDelay }}
+    >
       <div className="relative w-full h-48">
         <Image
           src={item.imageUrl || "https://placehold.co/600x400.png?text=News"}
           alt={item.title}
           layout="fill"
           objectFit="cover"
-          data-ai-hint="news article"
+          data-ai-hint={item.dataAiHint || "news article"}
         />
       </div>
       <CardHeader className="pb-3">
@@ -42,3 +46,4 @@ export function NewsCard({ item, animationDelay = "0ms" }: NewsCardProps) {
     </Card>
   );
 }
+

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -15,7 +16,10 @@ interface StartupCardProps {
 
 export function StartupCard({ startup, animationDelay = "0ms" }: StartupCardProps) {
   return (
-    <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300 animate-fade-in-up" style={{ animationDelay }}>
+    <Card 
+      className="flex flex-col h-full shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in-up transform hover:scale-105" 
+      style={{ animationDelay }}
+    >
       <CardHeader className="flex flex-row items-start gap-4 pb-4">
         <Image
           src={startup.logoUrl || "https://placehold.co/80x80.png?text=Logo"}
@@ -55,3 +59,4 @@ export function StartupCard({ startup, animationDelay = "0ms" }: StartupCardProp
     </Card>
   );
 }
+

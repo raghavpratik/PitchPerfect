@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -9,35 +10,48 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { Edit2, Eye, Tag, Link as LinkIcon, Youtube } from 'lucide-react';
+import { Edit2, Eye, Tag, Link as LinkIcon, Youtube, Sparkles } from 'lucide-react'; // Added Sparkles
 
-// Mock startup data - in a real app, this would come from a database
 const MOCK_STARTUP_ID_PREFIX = "mock_startup_";
+
+const allTips = [
+  "🚀 Keep your profile updated with your latest achievements.",
+  "💡 Network actively with investors on the platform.",
+  "📈 Share your progress and milestones regularly.",
+  "✨ A compelling summary can make all the difference.",
+  "📸 Ensure your logo and visuals are professional.",
+  "🔗 Link your pitch deck and video for maximum impact.",
+  "🏷️ Use relevant tags to improve discoverability.",
+  "🎯 Clearly define your target audience and problem.",
+  "🤝 Practice your pitch until it's seamless and impactful."
+];
 
 export default function FounderDashboardPage() {
   const { user, isLoggedIn } = useAuth();
   const router = useRouter();
   const [startup, setStartup] = useState<Startup | null>(null);
   const [editing, setEditing] = useState(false);
+  const [displayedTips, setDisplayedTips] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isLoggedIn || user?.role !== 'founder') {
       router.push('/signin');
     } else {
-      // Load startup data from localStorage or set to null if not found
       const storedStartup = localStorage.getItem(MOCK_STARTUP_ID_PREFIX + user.id);
       if (storedStartup) {
         setStartup(JSON.parse(storedStartup));
-        setEditing(false); // If data exists, show view mode first
+        setEditing(false); 
       } else {
-        setEditing(true); // If no data, go straight to edit mode
+        setEditing(true); 
       }
+      // Set dynamic tips
+      const shuffledTips = [...allTips].sort(() => 0.5 - Math.random());
+      setDisplayedTips(shuffledTips.slice(0, 3));
     }
   }, [isLoggedIn, user, router]);
 
   const handleFormSubmit = (data: Startup) => {
     setStartup(data);
-    // Save to localStorage with user-specific key
     if(user) {
         localStorage.setItem(MOCK_STARTUP_ID_PREFIX + user.id, JSON.stringify(data));
     }
@@ -45,7 +59,6 @@ export default function FounderDashboardPage() {
   };
 
   if (!isLoggedIn || user?.role !== 'founder') {
-    // This will be handled by useEffect redirect, but good for SSR/initial render
     return <div className="flex justify-center items-center h-screen"><p>Loading or redirecting...</p></div>;
   }
   
@@ -53,7 +66,7 @@ export default function FounderDashboardPage() {
      return (
         <div className="space-y-8">
             <h1 className="text-3xl font-bold font-headline">
-              {startup ? "Edit Your Startup Profile" : "Create Your Startup Profile"}
+              {startup ? "Edit Your Startup Profile" : "Launch Your Startup Profile"}
             </h1>
             <StartupForm initialData={startup || undefined} onSubmitSuccess={handleFormSubmit} />
         </div>
@@ -71,7 +84,7 @@ export default function FounderDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="animate-fade-in-up">
+          <Card className="animate-fade-in-up hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-start gap-4">
                 {startup.logoUrl && (
                     <Image 
@@ -130,14 +143,23 @@ export default function FounderDashboardPage() {
             <div className="animate-fade-in-up" style={{animationDelay: "100ms"}}>
                  <StatusTracker currentStage={startup.stage} />
             </div>
-            <Card className="animate-fade-in-up" style={{animationDelay: "200ms"}}>
+            <Card className="animate-fade-in-up hover:shadow-lg transition-shadow" style={{animationDelay: "200ms"}}>
                 <CardHeader>
-                    <CardTitle className="font-headline">Next Steps</CardTitle>
+                    <CardTitle className="font-headline flex items-center"><Sparkles className="mr-2 h-5 w-5 text-primary" />Founder Fuel</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                    <p>🚀 Keep your profile updated.</p>
-                    <p>💡 Network with investors.</p>
-                    <p>📈 Share your progress!</p>
+                    {displayedTips.length > 0 ? displayedTips.map((tip, index) => (
+                        <p key={index} className="flex items-start">
+                           <span className="mr-2 mt-1 text-primary">{tip.substring(0,1)}</span> 
+                           {tip.substring(2)}
+                        </p>
+                    )) : (
+                        <>
+                            <p>🚀 Keep your profile updated.</p>
+                            <p>💡 Network with investors.</p>
+                            <p>📈 Share your progress!</p>
+                        </>
+                    )}
                 </CardContent>
             </Card>
         </div>
@@ -145,3 +167,4 @@ export default function FounderDashboardPage() {
     </div>
   );
 }
+

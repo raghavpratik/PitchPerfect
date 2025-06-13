@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } } from 'react';
@@ -8,10 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { StatusTracker } from '@/components/dashboard/founder/StatusTracker';
-import { ArrowLeft, MessageCircle, Briefcase, DollarSign, Tag, Link as LinkIcon, Youtube, Lightbulb, Zap, TrendingUp, UserCircle } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Briefcase, DollarSign, Tag, Link as LinkIcon, Youtube, Lightbulb, Zap, TrendingUp, UserCircle, Info } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-// Mock data fetching - in a real app, fetch from API based on ID
 const MOCK_STARTUP_ID_PREFIX = "mock_startup_";
 
 const getMockStartupById = (id: string): Startup | null => {
@@ -28,8 +28,7 @@ const getMockStartupById = (id: string): Startup | null => {
       }
     }
   }
-  // Fallback if exact ID match not found (e.g., if ID format changed)
-  const item = localStorage.getItem(id); // Check if ID itself is the key (older mock data)
+  const item = localStorage.getItem(id); 
   if(item) {
     try { return JSON.parse(item); } catch (e) { /* ignore */ }
   }
@@ -52,7 +51,6 @@ export default function StartupProfilePage() {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      // Simulate API call
       setTimeout(() => {
         const fetchedStartup = getMockStartupById(id);
         setStartup(fetchedStartup);
@@ -88,7 +86,7 @@ export default function StartupProfilePage() {
           </div>
           <div className="lg:col-span-1 space-y-6">
             <Skeleton className="h-40 w-full rounded-lg" />
-            <Skeleton className="h-32 w-full rounded-lg" />
+            <Skeleton className="h-52 w-full rounded-lg" /> {/* Increased skeleton height */}
           </div>
         </div>
       </div>
@@ -113,12 +111,12 @@ export default function StartupProfilePage() {
   return (
     <div className="space-y-8">
       <Button variant="outline" size="sm" onClick={() => router.back()} className="animate-fade-in-up">
-        <ArrowLeft className="mr-2 h-4 w-4" /> Back to Startups
+        <ArrowLeft className="mr-2 h-4 w-4" /> Back to Discover
       </Button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="shadow-lg animate-fade-in-up">
+          <Card className="shadow-lg animate-fade-in-up hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01]">
             <CardHeader className="flex flex-col sm:flex-row items-start gap-6">
               <Image
                 src={startup.logoUrl || "https://placehold.co/120x120.png?text=Logo"}
@@ -196,25 +194,36 @@ export default function StartupProfilePage() {
             <StatusTracker currentStage={startup.stage} />
           </div>
           
-          <Card className="shadow-lg animate-fade-in-up" style={{animationDelay: "200ms"}}>
+          <Card className="shadow-lg animate-fade-in-up hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01]" style={{animationDelay: "200ms"}}>
             <CardHeader>
-              <CardTitle className="font-headline text-xl">Founder Information</CardTitle>
+              <CardTitle className="font-headline text-xl">Founder & Investment</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
                 <div className="flex items-center">
                     <UserCircle className="mr-3 h-8 w-8 text-muted-foreground" />
                     <div>
-                        {/* Placeholder - In a real app, fetch founder details */}
                         <p className="font-semibold">Founder Name (Placeholder)</p>
                         <p className="text-sm text-muted-foreground">contact@example.com</p>
                     </div>
                 </div>
-              <Button className="w-full mt-2">
+              <Button className="w-full">
                 <MessageCircle className="mr-2 h-4 w-4" /> Contact Founder
               </Button>
-              <Button variant="accent" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                <DollarSign className="mr-2 h-4 w-4" /> Invest Now (Placeholder)
-              </Button>
+              
+              <div className="mt-4 pt-4 border-t">
+                  <h4 className="font-semibold mb-2 text-md flex items-center">
+                    <Info className="mr-2 h-5 w-5 text-primary" /> Investment Opportunities
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-3">
+                      Interested in this venture? Use the 'Contact Founder' button to open discussions, negotiate terms, or signal your investment intent.
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                      (Note: Direct bidding and formal negotiation features are planned for a future update. The button below is a placeholder.)
+                  </p>
+                  <Button variant="accent" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    <DollarSign className="mr-2 h-4 w-4" /> Express Investment Interest (Placeholder)
+                  </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -222,3 +231,4 @@ export default function StartupProfilePage() {
     </div>
   );
 }
+

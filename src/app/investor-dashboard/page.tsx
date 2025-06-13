@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -7,15 +8,13 @@ import type { Startup, User } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, TrendingUp } from 'lucide-react'; // Added TrendingUp
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
 
-// Mock data - in real app, fetch from API and apply filters server-side or client-side with pagination
 const MOCK_STARTUP_ID_PREFIX = "mock_startup_";
 
-// Helper to get all mock startups from localStorage
 const getAllMockStartups = (): Startup[] => {
   const startups: Startup[] = [];
   for (let i = 0; i < localStorage.length; i++) {
@@ -31,6 +30,15 @@ const getAllMockStartups = (): Startup[] => {
   return startups;
 };
 
+const marketInsights = [
+  "📈 AI and Sustainability are trending sectors this month.",
+  "💡 Early-stage SaaS companies are seeing increased investor interest.",
+  "💰 Average seed round sizes are up by 5% this quarter (mock data).",
+  "🚀 Fintech innovations continue to disrupt traditional finance.",
+  "🌐 Web3 and Decentralized Tech startups are gaining traction.",
+  "헬스케어 분야의 기술 스타트업들이 주목받고 있습니다. (Korean: Healthcare tech startups are gaining attention.)"
+];
+
 
 export default function InvestorDashboardPage() {
   const { user, isLoggedIn } = useAuth();
@@ -39,16 +47,17 @@ export default function InvestorDashboardPage() {
   const [filteredStartups, setFilteredStartups] = useState<Startup[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState({ industry: "All", stage: "All", searchTerm: "" });
+  const [currentInsight, setCurrentInsight] = useState("");
 
   useEffect(() => {
     if (!isLoggedIn || user?.role !== 'investor') {
       router.push('/signin');
     } else {
-      // Simulate fetching data
       setIsLoading(true);
       const mockData = getAllMockStartups();
       setAllStartups(mockData);
-      setFilteredStartups(mockData); // Initially show all
+      setFilteredStartups(mockData); 
+      setCurrentInsight(marketInsights[Math.floor(Math.random() * marketInsights.length)]);
       setIsLoading(false);
     }
   }, [isLoggedIn, user, router]);
@@ -72,7 +81,6 @@ export default function InvestorDashboardPage() {
       );
     }
     setFilteredStartups(startupsToFilter);
-    // Simulate network delay for filter application
     setTimeout(() => setIsLoading(false), 300); 
   };
   
@@ -82,7 +90,23 @@ export default function InvestorDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold font-headline">Discover Startups</h1>
+      <div className="md:flex md:justify-between md:items-start">
+        <div className="mb-6 md:mb-0">
+            <h1 className="text-3xl font-bold font-headline">Discover Startups</h1>
+            <p className="text-muted-foreground">Filter and find your next big investment opportunity.</p>
+        </div>
+        <Card className="w-full md:w-auto md:max-w-xs animate-fade-in-up hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-2">
+                <CardTitle className="text-lg font-headline flex items-center">
+                    <TrendingUp className="mr-2 h-5 w-5 text-primary" /> Market Insights (Mock)
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-muted-foreground">{currentInsight}</p>
+            </CardContent>
+        </Card>
+      </div>
+      
       <StartupFilters onFilterChange={handleFilterChange} />
       
       {isLoading ? (
@@ -126,3 +150,4 @@ export default function InvestorDashboardPage() {
     </div>
   );
 }
+

@@ -3,13 +3,12 @@
 
 import React, { useEffect, useState } } from 'react';
 import Image from 'next/image';
-import type { Startup } from '@/types';
+import type { Startup, StartupStage } from '@/types';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatusTracker } from '@/components/dashboard/founder/StatusTracker';
-import { ArrowLeft, MessageCircle, Briefcase, DollarSign, Tag, Link as LinkIcon, Youtube, Lightbulb, Zap, TrendingUp, UserCircle, Info } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Briefcase, DollarSign, Lightbulb, Zap, TrendingUp, UserCircle, Info, Package, Target, CheckCircle, Award } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const MOCK_STARTUP_ID_PREFIX = "mock_startup_";
@@ -35,10 +34,16 @@ const getMockStartupById = (id: string): Startup | null => {
   return null;
 };
 
-const stageIcons = {
+const stageIcons: Record<StartupStage, React.ReactElement> = {
   "Idea": <Lightbulb className="mr-2 h-5 w-5" />,
+  "Pre-Seed": <Package className="mr-2 h-5 w-5" />,
+  "Seed": <Target className="mr-2 h-5 w-5" />,
   "MVP": <Zap className="mr-2 h-5 w-5" />,
   "Growth": <TrendingUp className="mr-2 h-5 w-5" />,
+  "Series A": <CheckCircle className="mr-2 h-5 w-5" />,
+  "Series B+": <Award className="mr-2 h-5 w-5" />,
+  "Acquired": <DollarSign className="mr-2 h-5 w-5" />,
+  "Others": <Info className="mr-2 h-5 w-5" />,
 };
 
 export default function StartupProfilePage() {
@@ -77,16 +82,12 @@ export default function StartupProfilePage() {
               <CardContent className="space-y-4">
                 <Skeleton className="h-6 w-1/3" />
                 <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-6 w-1/4" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-6 w-1/4" />
-                <div className="flex gap-2"> <Skeleton className="h-8 w-24" /> <Skeleton className="h-8 w-24" /></div>
               </CardContent>
             </Card>
           </div>
           <div className="lg:col-span-1 space-y-6">
             <Skeleton className="h-40 w-full rounded-lg" />
-            <Skeleton className="h-52 w-full rounded-lg" /> {/* Increased skeleton height */}
+            <Skeleton className="h-52 w-full rounded-lg" />
           </div>
         </div>
       </div>
@@ -103,10 +104,6 @@ export default function StartupProfilePage() {
     );
   }
   
-  const videoId = startup.videoLink && startup.videoLink.includes('youtube.com/watch?v=') 
-                  ? startup.videoLink.split('v=')[1].split('&')[0]
-                  : null;
-
 
   return (
     <div className="space-y-8">
@@ -132,7 +129,7 @@ export default function StartupProfilePage() {
                     <Briefcase className="mr-2 h-5 w-5 text-primary" /> {startup.industry}
                 </div>
                 <div className="flex items-center text-muted-foreground">
-                    {stageIcons[startup.stage]} {startup.stage} Stage
+                    {stageIcons[startup.stage] || stageIcons["Others"]} {startup.stage} Stage
                 </div>
               </div>
             </CardHeader>
@@ -142,49 +139,8 @@ export default function StartupProfilePage() {
                 <p className="text-foreground/80 whitespace-pre-wrap leading-relaxed">{startup.summary}</p>
               </div>
 
-              {videoId && (
-                <div>
-                  <h3 className="text-xl font-semibold font-headline mb-3 flex items-center"><Youtube className="mr-2 h-5 w-5 text-primary"/> Video Pitch</h3>
-                  <div className="aspect-video rounded-lg overflow-hidden border">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${videoId}`}
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                </div>
-              )}
-              
-              {(startup.pitchDeckUrl || startup.videoLink && !videoId) && (
-                <div className="space-y-3">
-                  <h3 className="text-xl font-semibold font-headline mb-2">Resources</h3>
-                  {startup.pitchDeckUrl && (
-                     <a href={startup.pitchDeckUrl} target="_blank" rel="noopener noreferrer" className="flex items-center text-primary hover:underline">
-                       <LinkIcon className="mr-2 h-4 w-4"/> View Pitch Deck (PDF)
-                     </a>
-                  )}
-                  {startup.videoLink && !videoId && (
-                     <a href={startup.videoLink} target="_blank" rel="noopener noreferrer" className="flex items-center text-primary hover:underline mt-2">
-                       <Youtube className="mr-2 h-4 w-4"/> Watch Video Pitch
-                     </a>
-                  )}
-                </div>
-              )}
+              {/* Pitch Deck, Video Link, and Tags sections are removed */}
 
-
-              {startup.tags && startup.tags.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-semibold font-headline mb-2 flex items-center"><Tag className="mr-2 h-5 w-5 text-primary"/> Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {startup.tags.map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-sm px-3 py-1">{tag}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>
@@ -231,4 +187,3 @@ export default function StartupProfilePage() {
     </div>
   );
 }
-

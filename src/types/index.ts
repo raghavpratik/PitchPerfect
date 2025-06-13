@@ -7,7 +7,7 @@ export interface User {
   avatarUrl?: string;
 }
 
-export type StartupStage = "Idea" | "MVP" | "Growth";
+export type StartupStage = "Idea" | "Pre-Seed" | "Seed" | "MVP" | "Growth" | "Series A" | "Series B+" | "Acquired" | "Others";
 
 export interface Startup {
   id: string;
@@ -16,10 +16,10 @@ export interface Startup {
   industry: string;
   stage: StartupStage;
   summary: string;
-  pitchDeckUrl?: string;
-  videoLink?: string;
-  tags: string[];
   founderId: string;
+  // pitchDeckUrl?: string; // Removed
+  // videoLink?: string; // Removed
+  // tags?: string[]; // Removed - Storing as a string in form, but not in main Startup object for now
 }
 
 export interface NewsItem {
@@ -31,7 +31,7 @@ export interface NewsItem {
   date: string;
   category: "Startup News" | "Stock Market Updates" | "Funding Rounds" | "Tech & AI";
   link: string;
-  dataAiHint?: string; // Added for better placeholder image generation hints
+  dataAiHint?: string;
 }
 
 export interface PricingTier {
@@ -41,4 +41,3 @@ export interface PricingTier {
   features: string[];
   highlight?: boolean;
 }
-

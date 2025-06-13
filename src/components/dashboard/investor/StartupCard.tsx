@@ -7,7 +7,7 @@ import type { Startup } from "@/types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Tag } from "lucide-react";
+import { ArrowRight } from "lucide-react"; // Removed Tag icon
 
 interface StartupCardProps {
   startup: Startup;
@@ -39,15 +39,7 @@ export function StartupCard({ startup, animationDelay = "0ms" }: StartupCardProp
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
             <Badge variant="outline">{startup.stage}</Badge>
         </div>
-        {startup.tags && startup.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-2">
-            {startup.tags.slice(0, 3).map(tag => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                <Tag className="mr-1 h-3 w-3" />{tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+        {/* Tags display removed */}
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
@@ -59,4 +51,3 @@ export function StartupCard({ startup, animationDelay = "0ms" }: StartupCardProp
     </Card>
   );
 }
-

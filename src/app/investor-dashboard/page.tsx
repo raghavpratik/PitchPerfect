@@ -4,11 +4,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StartupCard } from '@/components/dashboard/investor/StartupCard';
 import { StartupFilters } from '@/components/dashboard/investor/StartupFilters';
-import type { Startup, User } from '@/types';
+import type { Startup, User } from '@/types'; // Startup type will be updated
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle, TrendingUp } from 'lucide-react'; // Added TrendingUp
+import { AlertCircle, TrendingUp } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
@@ -76,8 +76,8 @@ export default function InvestorDashboardPage() {
       const term = newFilters.searchTerm.toLowerCase();
       startupsToFilter = startupsToFilter.filter(s => 
         s.name.toLowerCase().includes(term) || 
-        s.summary.toLowerCase().includes(term) ||
-        (s.tags && s.tags.some(tag => tag.toLowerCase().includes(term)))
+        s.summary.toLowerCase().includes(term)
+        // Removed tag-based filtering: || (s.tags && s.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     }
     setFilteredStartups(startupsToFilter);
@@ -124,7 +124,7 @@ export default function InvestorDashboardPage() {
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-6 w-1/4" />
+                {/* <Skeleton className="h-6 w-1/4" /> Skeleton for tags removed */}
               </CardContent>
               <CardFooter>
                 <Skeleton className="h-10 w-full" />
@@ -150,4 +150,3 @@ export default function InvestorDashboardPage() {
     </div>
   );
 }
-

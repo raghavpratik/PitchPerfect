@@ -95,7 +95,7 @@ export function ChatbotDialog({ isOpen, onOpenChange }: ChatbotDialogProps) {
       <DialogContent className="sm:max-w-[425px] md:max-w-[500px] lg:max-w-[600px] p-0">
         <DialogHeader className="p-6 pb-2">
           <DialogTitle className="flex items-center font-headline">
-            <Bot className="mr-2 h-6 w-6 text-primary" /> PitchPad AI Assistant
+            <Bot className="mr-2 h-6 w-6 text-primary" /> PitchPerfect AI Assistant
           </DialogTitle>
           <DialogDescription>
             Ask me anything or choose a suggestion below.

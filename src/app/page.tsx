@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <Rocket className="h-20 w-20 text-primary mx-auto mb-6" />
           <h1 className="text-4xl md:text-6xl font-bold font-headline mb-6 tracking-tight">
-            Welcome to <span className="text-primary">PitchPad</span>
+            Welcome to <span className="text-primary">PitchPerfect</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             The ultimate platform for founders to showcase their startup ideas and for investors to discover and support them. Let's build the future, together.
@@ -62,7 +63,7 @@ export default function HomePage() {
       {/* Features Section */}
       <section id="features" className="w-full py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline text-center mb-4">Why PitchPad?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-headline text-center mb-4">Why PitchPerfect?</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto">Empowering innovation with tools designed for success.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
@@ -116,10 +117,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold font-headline mb-6">Ready to Get Started?</h2>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-            Join PitchPad today and take the next step in your startup journey or find your next breakthrough investment.
+            Join PitchPerfect today and take the next step in your startup journey or find your next breakthrough investment.
           </p>
           <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/signup">Join PitchPad Now</Link>
+            <Link href="/signup">Join PitchPerfect Now</Link>
           </Button>
         </div>
       </section>

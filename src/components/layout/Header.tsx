@@ -38,7 +38,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Rocket className="h-7 w-7 text-primary" />
-          <span className="text-2xl font-bold font-headline text-primary">PitchPad</span>
+          <span className="text-2xl font-bold font-headline text-primary">PitchPerfect</span>
         </Link>
         
         <nav className="hidden items-center gap-4 md:flex">

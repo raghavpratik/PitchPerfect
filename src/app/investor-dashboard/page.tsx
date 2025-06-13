@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+
 
 // Mock data - in real app, fetch from API and apply filters server-side or client-side with pagination
 const MOCK_STARTUP_ID_PREFIX = "mock_startup_";
@@ -66,7 +68,7 @@ export default function InvestorDashboardPage() {
       startupsToFilter = startupsToFilter.filter(s => 
         s.name.toLowerCase().includes(term) || 
         s.summary.toLowerCase().includes(term) ||
-        s.tags.some(tag => tag.toLowerCase().includes(term))
+        (s.tags && s.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     }
     setFilteredStartups(startupsToFilter);
@@ -117,7 +119,7 @@ export default function InvestorDashboardPage() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>No Startups Found</AlertTitle>
           <AlertDescription>
-            No startups match your current filter criteria. Try adjusting your filters or check back later as new startups join PitchPad!
+            No startups match your current filter criteria. Try adjusting your filters or check back later as new startups join PitchPerfect!
           </AlertDescription>
         </Alert>
       )}

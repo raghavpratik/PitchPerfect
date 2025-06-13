@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -8,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ChatbotButton } from "@/components/chatbot/ChatbotButton";
 
 export const metadata: Metadata = {
-  title: "PitchPad - Showcase & Discover Startups",
+  title: "PitchPerfect - Showcase & Discover Startups",
   description: "A platform for founders to pitch their ideas and investors to find the next big thing.",
 };
 

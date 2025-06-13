@@ -62,7 +62,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     if (mode === 'signup') {
       const signupValues = values as SignUpFormValues;
       login({ id: Date.now().toString(), email: signupValues.email, role: signupValues.role, name: signupValues.name });
-      toast({ title: "Account Created!", description: "Welcome to PitchPad." });
+      toast({ title: "Account Created!", description: "Welcome to PitchPerfect." });
       router.push(signupValues.role === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
     } else {
       const signinValues = values as SignInFormValues;
@@ -70,7 +70,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       // For mock, we'll use the last selected role or default to founder
       const userRole = user?.role || 'founder';
       login({ id: Date.now().toString(), email: signinValues.email, role: userRole });
-      toast({ title: "Signed In!", description: "Welcome back to PitchPad." });
+      toast({ title: "Signed In!", description: "Welcome back to PitchPerfect." });
       router.push(userRole === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
     }
     setIsLoading(false);
@@ -81,7 +81,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     const roleToLogin = selectedRole || 'founder'; // Default to founder if no role selected for Google sign in
     login({ id: 'google-user', email: 'user@google.com', role: roleToLogin, name: 'Google User' });
-    toast({ title: "Signed In with Google!", description: "Welcome to PitchPad." });
+    toast({ title: "Signed In with Google!", description: "Welcome to PitchPerfect." });
     router.push(roleToLogin === 'founder' ? '/founder-dashboard' : '/investor-dashboard');
     setIsLoading(false);
   };
@@ -103,7 +103,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             {mode === 'signin' ? 'Welcome Back!' : 'Create Your Account'}
           </CardTitle>
           <CardDescription>
-            {mode === 'signin' ? 'Sign in to access your dashboard.' : 'Join PitchPad as a founder or investor.'}
+            {mode === 'signin' ? 'Sign in to access your dashboard.' : 'Join PitchPerfect as a founder or investor.'}
           </CardDescription>
         </CardHeader>
         <CardContent>

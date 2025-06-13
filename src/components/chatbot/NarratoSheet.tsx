@@ -9,56 +9,56 @@ import {
   SheetTitle,
   SheetDescription,
   SheetFooter,
-  SheetClose, // Added for potential close button inside
-} from "@/components/ui/sheet"; // Changed from Dialog
+} from "@/components/ui/sheet";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { getPersonalizedSuggestions } from '@/ai/flows/pitchpad-chatbot-suggestions';
 import type { PersonalizedSuggestionsInput, PersonalizedSuggestionsOutput } from '@/ai/flows/pitchpad-chatbot-suggestions';
-import { BrainCircuit, Send, User as UserIcon, MessageSquare } from 'lucide-react'; // Changed Bot to BrainCircuit
+import { getChatbotResponse } from '@/ai/flows/pitchpad-chatbot-flow'; // New import
+import type { ChatbotInput, ChatbotOutput } from '@/ai/flows/pitchpad-chatbot-flow'; // New import
+import { BrainCircuit, Send, User as UserIcon, MessageSquare, Loader2 } from 'lucide-react';
 import { Skeleton } from '../ui/skeleton';
-import { Badge } from '../ui/badge';
 
 interface Message {
   id: string;
   text: string;
   sender: 'user' | 'bot';
-  isSuggestion?: boolean;
+  isLoading?: boolean;
 }
 
-interface NarratoSheetProps {
+interface GeminiSheetProps { // Renamed from NarratoSheetProps
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }
 
-export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
+export function NarratoSheet({ isOpen, onOpenChange }: GeminiSheetProps) { // Component name kept for now due to potential references, but UI is "Gemini"
   const { user } = useAuth();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const narratoTitle = user?.role === 'founder'
-    ? "Narrato - Craft your startup narrative"
-    : user?.role === 'investor'
-      ? "Narrato - Uncover investment stories"
-      : "Narrato - Your AI Assistant";
+  const chatbotTitle = "Gemini - Your AI Assistant";
   
-  const initialBotMessage = user?.role === 'founder'
-    ? "Hello Founder! I'm Narrato. How can I assist with your pitch today? Here are some ideas:"
-    : user?.role === 'investor'
-      ? "Greetings Investor! Narrato here. Looking for the next big thing? Here's how I can help:"
-      : "Hi there! I'm Narrato. How can I help you navigate PitchPerfect?";
+  const getInitialBotMessage = () => {
+    if (user?.role === 'founder') {
+      return "Hello Founder! I'm Gemini. How can I assist with your pitch today? Here are some ideas:";
+    } else if (user?.role === 'investor') {
+      return "Greetings Investor! Gemini here. Looking for the next big thing? Here's how I can help:";
+    }
+    return "Hi there! I'm Gemini. How can I help you navigate PitchPerfect?";
+  };
+
 
   useEffect(() => {
     if (isOpen) {
-      // Set initial bot message as soon as the sheet opens
       setMessages([{
         id: Date.now().toString(),
-        text: initialBotMessage,
+        text: getInitialBotMessage(),
         sender: 'bot'
       }]);
 
@@ -72,32 +72,31 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
           setSuggestions(result.suggestions);
         } catch (error) {
           console.error("Failed to fetch suggestions:", error);
-          setSuggestions([]); // Set to empty array, no error message in chat
+          setSuggestions([]); 
         } finally {
           setIsLoadingSuggestions(false);
         }
       };
       fetchSuggestions();
     } else {
-      // Reset state when sheet closes
       setMessages([]);
       setSuggestions([]);
       setInputText('');
-      setIsLoadingSuggestions(true); // Reset loading state for next open
+      setIsLoadingSuggestions(true);
+      setIsBotTyping(false);
     }
-  }, [isOpen, user?.role, initialBotMessage]);
+  }, [isOpen, user?.role]); // getInitialBotMessage will re-evaluate if user.role changes while open
 
   useEffect(() => {
-    // Scroll to bottom when new messages are added
     if (scrollAreaRef.current) {
       const scrollableView = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
       if (scrollableView) {
         scrollableView.scrollTop = scrollableView.scrollHeight;
       }
     }
-  }, [messages]);
+  }, [messages, isBotTyping]);
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const currentText = textToSend || inputText;
     if (currentText.trim() === '') return;
 
@@ -106,9 +105,15 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
       text: currentText, 
       sender: 'user' 
     };
+    setMessages(prev => [...prev, newUserMessage]);
+    if (!textToSend) {
+      setInputText('');
+    }
+    
+    setIsBotTyping(true);
     
     let botResponseText = '';
-    const lowerCaseText = currentText.toLowerCase();
+    const lowerCaseText = currentText.toLowerCase().trim();
 
     const creatorQueries = [
       "who created you", "who made you", "who developed you", "who designed you",
@@ -129,12 +134,18 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
       botResponseText = "PitchPerfect is Design & Developed by raghavpratik.";
     } else if (teamQueries.some(query => lowerCaseText.includes(query))) {
       botResponseText = "Here’s the founding team of PitchPerfect:\n\n👑 raghavpratik – Founder & CEO\n🎯 Muskan Sharma – Co-Founder & Chief Product Officer\n💡 Naman Bhojwani – Co-Founder & Chief Technology Officer";
-    }
-     else if (lowerCaseText.includes("hello") || lowerCaseText.includes("hi")) {
-      botResponseText = `Hello there! How can I assist you with PitchPerfect today?`;
     } else {
-      // In a real app, this would call a Genkit flow for chat
-      botResponseText = `I've received your message: "${currentText}". My full conversational abilities are still under development, but I'm learning fast!`;
+      try {
+        const chatbotInput: ChatbotInput = { 
+          userInput: currentText,
+          userRole: user?.role || 'guest'
+        };
+        const result: ChatbotOutput = await getChatbotResponse(chatbotInput);
+        botResponseText = result.response;
+      } catch (error) {
+        console.error("Error getting chatbot response:", error);
+        botResponseText = "Sorry, I encountered an issue trying to respond. Please try again.";
+      }
     }
 
     const botResponse: Message = { 
@@ -143,10 +154,8 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
       sender: 'bot' 
     };
     
-    setMessages(prev => [...prev, newUserMessage, botResponse]);
-    if (!textToSend) { // Clear input only if it wasn't a suggestion click
-      setInputText('');
-    }
+    setMessages(prev => [...prev, botResponse]);
+    setIsBotTyping(false);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -158,10 +167,10 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
       <SheetContent side="right" className="sm:max-w-md w-full flex flex-col p-0">
         <SheetHeader className="p-4 pb-2 border-b">
           <SheetTitle className="flex items-center text-xl font-headline">
-            <BrainCircuit className="mr-2 h-7 w-7 text-primary" /> {narratoTitle}
+            <BrainCircuit className="mr-2 h-7 w-7 text-primary" /> {chatbotTitle}
           </SheetTitle>
           <SheetDescription className="text-xs">
-            Your AI-powered guide on PitchPerfect.
+            Your AI-powered guide on PitchPerfect. Powered by Gemini.
           </SheetDescription>
         </SheetHeader>
         
@@ -181,14 +190,22 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
                 {msg.sender === 'user' && <UserIcon className="h-6 w-6 text-muted-foreground flex-shrink-0 self-start" />}
               </div>
             ))}
-            {isLoadingSuggestions && messages.length <= 1 && ( // Only show skeleton if it's initial load and only bot greeting is present
+            {isBotTyping && (
+              <div className="flex items-end gap-2">
+                <BrainCircuit className="h-6 w-6 text-primary flex-shrink-0 self-start" />
+                <div className="max-w-[85%] rounded-lg p-3 text-sm shadow-md bg-muted text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin inline-block mr-2" /> Gemini is thinking...
+                </div>
+              </div>
+            )}
+            {!isBotTyping && isLoadingSuggestions && messages.length <= 1 && (
               <div className="space-y-2 pt-2">
                 <Skeleton className="h-10 w-full rounded-md" />
                 <Skeleton className="h-10 w-5/6 rounded-md" />
                 <Skeleton className="h-10 w-3/4 rounded-md" />
               </div>
             )}
-            {!isLoadingSuggestions && suggestions.length > 0 && messages.length <=1 && ( // Only show initial suggestions if no other interaction
+            {!isBotTyping && !isLoadingSuggestions && suggestions.length > 0 && messages.length <=1 && (
                <div className="pt-4 space-y-2">
                  <p className="text-xs text-muted-foreground mb-2">Or try one of these:</p>
                  {suggestions.map((suggestion, index) => (
@@ -211,13 +228,14 @@ export function NarratoSheet({ isOpen, onOpenChange }: NarratoSheetProps) {
         <SheetFooter className="p-4 pt-2 border-t bg-background">
           <div className="flex w-full items-center space-x-2">
             <Input 
-              placeholder="Ask Narrato..." 
+              placeholder="Ask Gemini..." 
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); }}}
               className="flex-1"
+              disabled={isBotTyping}
             />
-            <Button onClick={() => handleSend()} size="icon" aria-label="Send message">
+            <Button onClick={() => handleSend()} size="icon" aria-label="Send message" disabled={isBotTyping}>
               <Send className="h-4 w-4" />
             </Button>
           </div>

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
-import { Loader2, UploadCloud, BrainCircuit, Sparkles, FileImage, Wand2 } from 'lucide-react';
+import { Loader2, UploadCloud, BrainCircuit, Sparkles, FileImage, Wand2, BarChart3, DollarSign, Users, TrendingUp as TrendingUpIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
@@ -25,7 +25,7 @@ export default function FounderDashboardPage() {
   const router = useRouter();
 
   const [ideaPrompt, setIdeaPrompt] = useState('');
-  const [enhancedPrompt, setEnhancedPrompt] = useState('');
+  const [enhancedPromptText, setEnhancedPromptText] = useState(''); // Renamed to avoid conflict
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [isLoadingEnhance, setIsLoadingEnhance] = useState(false);
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false);
@@ -44,10 +44,10 @@ export default function FounderDashboardPage() {
       return;
     }
     setIsLoadingEnhance(true);
-    setEnhancedPrompt('');
+    setEnhancedPromptText('');
     try {
       const result = await enhancePrompt({ originalPrompt: ideaPrompt });
-      setEnhancedPrompt(result.enhancedPrompt);
+      setEnhancedPromptText(result.enhancedPrompt);
       toast({ title: "Prompt Enhanced!", description: "Your idea has been refined by AI." });
     } catch (error) {
       console.error("Error enhancing prompt:", error);
@@ -58,7 +58,7 @@ export default function FounderDashboardPage() {
   };
 
   const handleGenerateImage = async () => {
-    const promptToUse = enhancedPrompt || ideaPrompt;
+    const promptToUse = enhancedPromptText || ideaPrompt;
     if (!promptToUse.trim()) {
       toast({ title: "Empty Prompt", description: "Please enter or enhance your idea first.", variant: "destructive" });
       return;
@@ -69,7 +69,7 @@ export default function FounderDashboardPage() {
       const result = await generateImageFromPrompt({ prompt: promptToUse });
       setGeneratedImageUrl(result.imageUrl); 
       if (result.revisedPrompt) {
-        setEnhancedPrompt(result.revisedPrompt);
+        setEnhancedPromptText(result.revisedPrompt); // Update enhancedPromptText here
          toast({ title: "Image Generated!", description: "AI also revised the prompt slightly for this image." });
       } else {
         toast({ title: "Image Generated!", description: "Your vision, visualized by AI." });
@@ -103,7 +103,7 @@ export default function FounderDashboardPage() {
               value={ideaPrompt}
               onChange={(e) => {
                 setIdeaPrompt(e.target.value);
-                if (enhancedPrompt) setEnhancedPrompt(''); 
+                if (enhancedPromptText) setEnhancedPromptText(''); 
                 if (generatedImageUrl) setGeneratedImageUrl(null); 
               }}
               rows={5}
@@ -131,13 +131,13 @@ export default function FounderDashboardPage() {
                 <UploadCloud className="mr-2 h-5 w-5 group-hover:animate-pulse" /> Upload Photo (Placeholder)
             </Button>
 
-            {enhancedPrompt && (
+            {enhancedPromptText && (
               <Card className="bg-secondary/50">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center"><Wand2 className="mr-2 h-5 w-5 text-primary"/> AI-Enhanced Prompt</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground italic whitespace-pre-wrap">{enhancedPrompt}</p>
+                  <p className="text-muted-foreground italic whitespace-pre-wrap">{enhancedPromptText}</p>
                 </CardContent>
               </Card>
             )}
@@ -171,6 +171,45 @@ export default function FounderDashboardPage() {
       </section>
 
       <section className="animate-fade-in-up" style={{animationDelay: "200ms"}}>
+        <div className="flex items-center mb-6">
+          <BarChart3 className="h-8 w-8 text-primary mr-3" />
+          <h2 className="text-2xl md:text-3xl font-bold font-headline">Key Milestones & Insights</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Avg. Seed Round (Q3)</CardTitle>
+              <DollarSign className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$750K</div>
+              <p className="text-xs text-muted-foreground">+15% from last quarter</p>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Successful Pitches</CardTitle>
+              <TrendingUpIcon className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">120+</div>
+              <p className="text-xs text-muted-foreground">+22% this month</p>
+            </CardContent>
+          </Card>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Founders</CardTitle>
+              <Users className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">500+</div>
+              <p className="text-xs text-muted-foreground">Growing community</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="animate-fade-in-up" style={{animationDelay: "400ms"}}>
         <div className="flex items-center mb-6">
           <Sparkles className="h-8 w-8 text-primary mr-3" />
           <h2 className="text-2xl md:text-3xl font-bold font-headline">Recent Sparks & Community Ideas</h2>

@@ -8,7 +8,7 @@ import type { Startup, User } from '@/types'; // Startup type will be updated
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle, TrendingUp } from 'lucide-react';
+import { AlertCircle, TrendingUp, Activity, Users as UsersIcon, BarChart2 } from 'lucide-react'; // Added Activity, UsersIcon, BarChart2
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
@@ -77,7 +77,6 @@ export default function InvestorDashboardPage() {
       startupsToFilter = startupsToFilter.filter(s => 
         s.name.toLowerCase().includes(term) || 
         s.summary.toLowerCase().includes(term)
-        // Removed tag-based filtering: || (s.tags && s.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     }
     setFilteredStartups(startupsToFilter);
@@ -90,21 +89,44 @@ export default function InvestorDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="md:flex md:justify-between md:items-start">
-        <div className="mb-6 md:mb-0">
+      <div className="md:flex md:items-start md:gap-6">
+        <div className="flex-grow mb-6 md:mb-0">
             <h1 className="text-3xl font-bold font-headline">Discover Startups</h1>
             <p className="text-muted-foreground">Filter and find your next big investment opportunity.</p>
         </div>
-        <Card className="w-full md:w-auto md:max-w-xs animate-fade-in-up hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-headline flex items-center">
-                    <TrendingUp className="mr-2 h-5 w-5 text-primary" /> Market Insights (Mock)
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-sm text-muted-foreground">{currentInsight}</p>
-            </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4 md:w-auto md:max-w-xs lg:max-w-md">
+            <Card className="w-full animate-fade-in-up hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-lg font-headline flex items-center">
+                        <TrendingUp className="mr-2 h-5 w-5 text-primary" /> Market Insights (Mock)
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">{currentInsight}</p>
+                </CardContent>
+            </Card>
+            <Card className="w-full animate-fade-in-up hover:shadow-lg transition-shadow" style={{animationDelay: "100ms"}}>
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-lg font-headline flex items-center">
+                        <Activity className="mr-2 h-5 w-5 text-primary" /> Platform Activity (Mock)
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-1">
+                    <div className="flex items-center text-sm text-muted-foreground">
+                        <BarChart2 className="mr-2 h-4 w-4" />
+                        <strong>{allStartups.length}</strong>&nbsp;Startups Listed
+                    </div>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                        <UsersIcon className="mr-2 h-4 w-4" />
+                        <strong>150+</strong>&nbsp;Active Investors
+                    </div>
+                     <div className="flex items-center text-sm text-muted-foreground">
+                        <TrendingUp className="mr-2 h-4 w-4" />
+                        <strong>$5M+</strong>&nbsp;Pledged (Demo)
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
       </div>
       
       <StartupFilters onFilterChange={handleFilterChange} />
@@ -124,7 +146,6 @@ export default function InvestorDashboardPage() {
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-2/3" />
-                {/* <Skeleton className="h-6 w-1/4" /> Skeleton for tags removed */}
               </CardContent>
               <CardFooter>
                 <Skeleton className="h-10 w-full" />

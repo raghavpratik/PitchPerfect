@@ -39,7 +39,7 @@ export default function HomePage() {
       {/* Top Branding */}
       <section className="w-full pt-8 text-center animate-fade-in-up">
         <h1 className="text-2xl md:text-3xl font-bold font-headline">
-          <span className="text-primary">PitchPerfect Ltd.</span>
+          <span className="text-primary">PitchPerfect Pvt Ltd.</span>
         </h1>
       </section>
 
@@ -228,4 +228,3 @@ export default function HomePage() {
     </div>
   );
 }
-

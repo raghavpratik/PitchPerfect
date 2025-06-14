@@ -101,7 +101,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="flex justify-center pt-4">
-                    <Image src="https://placehold.co/600x400.png" alt="Founder using PitchPerfect" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="founder success"/>
+                    <Image src="https://images.unsplash.com/photo-1645245924084-d6cb34ad0687?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb3VuZGVyJTIwc3VjY2Vzc3xlbnwwfHx8fDE3NDk4NzQ3Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Founder using PitchPerfect" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="founder success"/>
                 </div>
               </CardContent>
             </Card>
@@ -137,7 +137,7 @@ export default function HomePage() {
                   </div>
                 </div>
                  <div className="flex justify-center pt-4">
-                    <Image src="https://placehold.co/600x400.png" alt="Investor reviewing startups" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="investor discovery"/>
+                    <Image src="https://images.unsplash.com/photo-1672626913402-74259083bdd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxpbnZlc3RvciUyMGRpc2NvdmVyeXxlbnwwfHx8fDE3NDk4NzQ3Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Investor reviewing startups" width={500} height={300} className="rounded-lg shadow-md" data-ai-hint="investor discovery"/>
                 </div>
               </CardContent>
             </Card>
@@ -151,12 +151,12 @@ export default function HomePage() {
           <h2 className="text-3xl md:text-4xl font-bold font-headline text-center mb-12">The Dashboard Advantage 💡</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-center">
             <div className="flex flex-col items-center animate-fade-in-up" style={{animationDelay: `300ms`}}>
-              <Image src="https://placehold.co/600x350.png" alt="Founder Dashboard Preview" width={500} height={290} className="rounded-lg shadow-xl mb-6" data-ai-hint="founder dashboard mockup"/>
+              <Image src="https://images.unsplash.com/photo-1699423957878-bff709d3dd4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmb3VuZGVyJTIwZGFzaGJvYXJkJTIwbW9ja3VwfGVufDB8fHx8MTc0OTg3NDc3N3ww&ixlib=rb-4.1.0&q=80&w=1080" alt="Founder Dashboard Preview" width={500} height={290} className="rounded-lg shadow-xl mb-6" data-ai-hint="founder dashboard mockup"/>
               <h3 className="text-xl font-semibold font-headline mb-2">Founder's Command Center</h3>
               <p className="text-muted-foreground">From sparking initial ideas with AI to building a comprehensive startup profile, your dashboard is where your vision takes shape and meets opportunity.</p>
             </div>
             <div className="flex flex-col items-center animate-fade-in-up" style={{animationDelay: `400ms`}}>
-              <Image src="https://placehold.co/600x350.png" alt="Investor Dashboard Preview" width={500} height={290} className="rounded-lg shadow-xl mb-6" data-ai-hint="investor dashboard interface"/>
+              <Image src="https://images.unsplash.com/photo-1652180785831-911ebe69b68d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxpbnZlc3RvciUyMGRhc2hib2FyZCUyMGludGVyZmFjZXxlbnwwfHx8fDE3NDk4NzQ3Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Investor Dashboard Preview" width={500} height={290} className="rounded-lg shadow-xl mb-6" data-ai-hint="investor dashboard interface"/>
               <h3 className="text-xl font-semibold font-headline mb-2">Investor's Discovery Hub</h3>
               <p className="text-muted-foreground">Navigate a dynamic landscape of startups, utilize powerful filters, track promising ventures, and gain market insights, all in one place.</p>
             </div>

@@ -1,0 +1,27 @@
+{
+  "node": {
+    "40bed84537da81a5483191170bebd1402174cae047": {
+      "workers": {
+        "app/investor-dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/investor-dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/pitchpad-chatbot-suggestions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/pitchpad-chatbot-flow.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/investor-dashboard/page": "action-browser"
+      }
+    },
+    "40adc2e896d5962cd5c79a507df1012b747ec1721b": {
+      "workers": {
+        "app/investor-dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/investor-dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/pitchpad-chatbot-suggestions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/pitchpad-chatbot-flow.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/investor-dashboard/page": "action-browser"
+      }
+    }
+  },
+  "edge": {}
+}

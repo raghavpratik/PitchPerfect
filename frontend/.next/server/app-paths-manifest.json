@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/founder-dashboard/page": "app/founder-dashboard/page.js",
+  "/investor-dashboard/page": "app/investor-dashboard/page.js",
+  "/news/page": "app/news/page.js",
+  "/page": "app/page.js",
+  "/profile-settings/page": "app/profile-settings/page.js",
+  "/signin/page": "app/signin/page.js",
+  "/signup/page": "app/signup/page.js"
+}

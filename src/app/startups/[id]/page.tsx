@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState } } from 'react';
+import React, { useEffect, useState }  from 'react';
 import Image from 'next/image';
 import type { Startup, StartupStage } from '@/types';
 import { useParams, useRouter } from 'next/navigation';
@@ -176,7 +176,7 @@ export default function StartupProfilePage() {
                   <p className="text-xs text-muted-foreground mb-3">
                       (Note: Direct bidding and formal negotiation features are planned for a future update. The button below is a placeholder.)
                   </p>
-                  <Button variant="accent" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Button variant ="accent" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                     <DollarSign className="mr-2 h-4 w-4" /> Express Investment Interest (Placeholder)
                   </Button>
               </div>
